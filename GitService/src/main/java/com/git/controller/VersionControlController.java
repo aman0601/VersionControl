@@ -20,16 +20,6 @@ public class VersionControlController {
 	@Autowired
 	private VersionControlService versionControlService;
 
-	@GetMapping("/{fileName}")
-	public ResponseEntity<String> getFile(@PathVariable String fileName) {
-		String content = versionControlService.getFileContent(fileName);
-		if (content.equals("File not found")) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(content);
-		} else {
-			return ResponseEntity.ok(content);
-		}
-	}
-
 	@PostMapping("/{fileName}")
 	public ResponseEntity<String> createOrUpdateFile(@PathVariable String fileName, @RequestBody String content) {
 		versionControlService.createOrUpdateFile(fileName, content);
@@ -50,6 +40,16 @@ public class VersionControlController {
 	public ResponseEntity<String> getDiff(@PathVariable String file1, @PathVariable String file2) {
 		String diff = versionControlService.getDiff(file1, file2);
 		return ResponseEntity.ok(diff);
+	}
+
+	@GetMapping("/{fileName}")
+	public ResponseEntity<String> getFile(@PathVariable String fileName) {
+		String content = versionControlService.getFileContent(fileName);
+		if (content.equals("File not found")) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(content);
+		} else {
+			return ResponseEntity.ok(content);
+		}
 	}
 
 	@GetMapping("/merge/{base}/{modified}/{remote}")
